@@ -1,0 +1,329 @@
+{
+  "swagger": "2.0",
+  "schemes": ["http"],
+  "info": {
+    "title": "Architecture Metrics API",
+    "version": "1.0",
+    "description": "# Description\n**Point of Contact: Philip Holtzman**</br>\nThis service runs periodically to mine response time statistics out of Kibana and store the summarized data in another ELK index. It is nominally invoked every 5 minutes by timer service.\n\n# Change Log\n## v1\n - Initial Version\n",
+    "contact": {
+      "name": "Philip Holtzman"
+    }
+  },
+  "host": "example.com",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "This resource returns the service name, API version, build number, githash, operational environment, and region, as well as HAL links to other top-level resources.\nScopes: no scopes required",
+        "summary": "Retrieve information about this service",
+        "operationId": "UnnammedEndpointGet",
+        "produces": [
+          "application/hal+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "title": "Retrieveinformationaboutthisserviceresponse",
+              "example": {
+                "value": "",
+                "serviceInfo": {
+                  "name": "daf-config-consumer-helper",
+                  "apiVersion": 1.1,
+                  "buildNumber": 56883,
+                  "gitHash": "27d15702d90dee073897ff893da4877cc6fbb2c8",
+                  "operationalEnvironment": "production",
+                  "region": "us-dgn-1",
+                  "serviceDiscoveryName": "daf-config-consumer-helper"
+                },
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/"
+                  },
+                  "status": {
+                    "href": "<HOST>/status"
+                  },
+                  "healthcheck": {
+                    "href": "<HOST>/healthcheck"
+                  }
+                }
+              },
+              "type": "object",
+              "properties": {
+                "serviceInfo": {
+                  "type": "object"
+                },
+                "_links": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "serviceInfo",
+                "_links"
+              ]
+            },
+            "examples": {
+              "application/hal+json": {
+                "serviceInfo": {
+                  "name": "daf-config-consumer-helper",
+                  "apiVersion": 1.1,
+                  "buildNumber": 56883,
+                  "gitHash": "27d15702d90dee073897ff893da4877cc6fbb2c8",
+                  "operationalEnvironment": "production",
+                  "region": "us-dgn-1",
+                  "serviceDiscoveryName": "daf-config-consumer-helper"
+                },
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/"
+                  },
+                  "status": {
+                    "href": "<HOST>/status"
+                  },
+                  "healthcheck": {
+                    "href": "<HOST>/healthcheck"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "tags": [
+          "Standard Endpoints"
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "description": "The status attributes can be either OK or DEGRADED.\nScopes: no scopes required",
+        "summary": "Retrieve the status of the service",
+        "operationId": "StatusGet",
+        "produces": [
+          "application/hal+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "title": "Retrievethestatusoftheserviceresponse",
+              "example": {
+                "value":"",
+                "overall": "OK",
+                "config-service": "OK",
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/status"
+                  }
+                }
+              },
+              "type": "object",
+              "properties": {
+                "overall": {
+                  "type": "string"
+                },
+                "_links": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "overall",
+                "_links"
+              ]
+            },
+            "examples": {
+              "application/hal+json": {
+                "overall": "OK",
+                "config-service": "OK",
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/status"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "tags": [
+          "Standard Endpoints"
+        ]
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "description": "The Health Check will check on the status of any of the services called by this service.\nScopes: no scopes required",
+        "summary": "Perform a Health Check on the service",
+        "operationId": "HealthcheckGet",
+        "produces": [
+          "application/hal+json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "title": "Retrievethestatusoftheserviceresponse",
+              "example": {
+                "value": "",
+                "overall": "OK",
+                "config-service": "OK",
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/status"
+                  }
+                }
+              },
+              "type": "object",
+              "properties": {
+                "overall": {
+                  "type": "string"
+                },
+                "_links": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "overall",
+                "_links"
+              ]
+            },
+            "examples": {
+              "application/hal+json": {
+                "overall": "OK",
+                "config-service": "OK",
+                "_links": {
+                  "self": {
+                    "href": "<HOST>/healthcheck"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "tags": [
+          "Standard Endpoints"
+        ]
+      }
+    },
+    "/gather-metrics": {
+      "post": {
+        "description": "This endpoint is the mechanism by which the service is invoked to do a metrics gathering run.",
+        "summary": "Kick off a metrics gathering run",
+        "operationId": "gather_metrics",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lookbackSeconds": {
+                  "type": "number",
+                  "description": "The desired duration of the metrics gathering period. Either use this parameter OR use the timeWindow object. The configured lookback buffer is subtracted from time now to determine the end time of the gathering period. This parameter is subtracted from the end time to determine the begin time of the metrics gathering period."
+                },
+                "timeWindow": {
+                  "$ref": "#/definitions/timewindow"
+                }
+              }
+            },
+            "x-examples": {
+              "application/json": {
+                "lookbackSeconds": 300
+              },
+              "json2": {
+                "timeWindow": {
+                  "beginTime": "2019-01-01T12:00:00Z",
+                  "endTime": "2019-01-01T12:05:00Z"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "application/json": {
+                "message": "Kicking off metrics gathering!"
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "Unexpected error in API call. See HTTP response body for details.",
+            "schema": {},
+            "examples": {
+              "application/json": {
+                "error": "bad inputs"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Functionality"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "timewindow": {
+      "type": "object",
+      "description": "This is used to explicitly define the begin and end times of the metrics gathering period. Either this object OR the lookbackSeconds parameter is required.",
+      "properties": {
+        "beginTime": {
+          "type": "string",
+          "description": "ISO8601 timestamp defining the begin time of the metrics gathering period.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "ISO8601 timestamp defining the end time of the metrics gathering period.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "beginTime",
+        "endTime"
+      ],
+      "title": "timewindow"
+    }
+  },
+  "tags": [
+    {
+      "name": "Standard Endpoints"
+    },
+    {
+      "name": "Functionality"
+    }
+  ]
+}
